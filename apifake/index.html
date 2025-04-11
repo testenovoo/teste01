@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+
+  <div class="container">
+    <img src="Gov.br_logo.svg.webp" alt="Logo Governo" class="logo">
+  <meta charset="UTF-8">
+  <title>Verificação de Elegibilidade</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    .container {
+      background-color: #fff;
+      padding: 30px 20px;
+      max-width: 400px;
+      width: 90%;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      border-radius: 8px;
+      text-align: center;
+    }
+
+    h2 {
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    p {
+      color: #666;
+      margin-bottom: 20px;
+    }
+
+    input[type="text"] {
+      padding: 12px;
+      width: 90%;
+      max-width: 100%;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 16px;
+    }
+
+    .btn {
+      padding: 12px 25px;
+      background-color: #2e7d32;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .btn:hover {
+      background-color: #1b5e20;
+    }
+
+    #resultado {
+      margin-top: 20px;
+    }
+
+    #mensagem {
+      color: #2e7d32;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    @media screen and (max-width: 480px) {
+      .container {
+        padding: 25px 15px;
+      }
+
+      input[type="text"] {
+        font-size: 14px;
+      }
+
+      .btn {
+        font-size: 14px;
+        padding: 10px 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Verificação de Elegibilidade</h2>
+    <p>Digite seu nome completo para verificar se você possui valores disponíveis para saque.</p>
+    <input type="text" id="nome" placeholder="Ex: Rafael Oliveira"><br>
+    <button id="verificar" class="btn">VERIFICAR</button>
+
+    <div id="resultado" class="hidden">
+      <h3 id="mensagem"></h3>
+    </div>
+  </div>
+
+  <script>
+    function gerarValorAleatorio() {
+      const valor = Math.floor(Math.random() * (7000 - 2000 + 1)) + 2000;
+      return `R$${valor.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    }
+
+    document.getElementById('verificar').addEventListener('click', function () {
+      const nome = document.getElementById('nome').value.trim();
+      if (nome.length < 5) {
+        alert('Por favor, digite seu nome completo.');
+        return;
+      }
+
+      const valor = gerarValorAleatorio();
+      const mensagem = `${nome}, encontramos ${valor} em reembolso disponível para seu CPF.`;
+      document.getElementById('mensagem').textContent = mensagem;
+      document.getElementById('resultado').classList.remove('hidden');
+    });
+  </script>
+</body>
+</html>

